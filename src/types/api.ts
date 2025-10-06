@@ -1,43 +1,49 @@
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  age: number;
-}
-
-export interface ApiResponse<T = unknown> {
-  message: string;
-  status: number;
-  data?: T;
-}
-
-export interface HealthStatus {
-  status: 'UP' | 'DOWN';
-  timestamp: string;
-}
-
-export interface MetricsData {
-  metrics: {
-    activeUsers: number;
-    requestsPerSecond: number;
-    uptime: string;
-    memoryUsage: string;
-  };
-}
-
+// Types pour l'authentification
 export interface LoginRequest {
-  username: string;
+  email: string;
   password: string;
 }
 
-export interface AuthResponse {
-  token: string;
-  type: string;
-  expiresIn: number;
+export interface RegisterRequest {
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
 }
 
-export interface CreateUserRequest {
-  name: string;
+export interface RefreshRequest {
+  refreshToken: string;
+}
+
+export interface ResetPasswordRequest {
   email: string;
-  age: number;
+  newPassword: string;
+  resetToken: string;
+}
+
+// Types pour les utilisateurs
+export interface User {
+  id?: number;
+  name: string;
+  surname: string;
+  email: string;
+  role?: string;
+}
+
+// Réponse API générique
+export interface ResponseApi<T = undefined> {
+  data: T;
+  meta?: Record<string, undefined>;
+}
+
+// Contexte d'authentification
+export interface AuthContextType {
+  user: User | null;
+  login: (email: string, password: string) => Promise<void>;
+  register: (userData: RegisterRequest) => Promise<void>;
+  logout: () => Promise<void>;
+  loading: boolean;
+  error: string | null;
+  setError: (error: string | null) => void;
+  isAuthenticated: boolean;
 }

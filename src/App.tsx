@@ -1,7 +1,6 @@
 import React from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import LoginForm from './components/LoginForm';
-import RegisterForm from './components/RegisterForm';
+import AuthPage from './pages/AuthPage';
 import UserList from './components/UserList';
 
 const AppContent: React.FC = () => {
@@ -19,22 +18,7 @@ const AppContent: React.FC = () => {
   }
 
   if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-gray-100">
-        <header className="bg-white shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            <h1 className="text-2xl font-bold text-gray-800">VERA Application</h1>
-            <p className="text-gray-600 text-sm">Veuillez vous connecter ou créer un compte</p>
-          </div>
-        </header>
-        <main className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <LoginForm />
-            <RegisterForm />
-          </div>
-        </main>
-      </div>
-    );
+    return <AuthPage />;
   }
 
   return (

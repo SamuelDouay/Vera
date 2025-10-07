@@ -1,10 +1,34 @@
 // src/components/LoginForm.tsx
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  TextField,
+  Button,
+  Box,
+  Typography,
+  Divider,
+  Alert,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  IconButton,
+  InputAdornment,
+} from '@mui/material';
+import {
+  Visibility,
+  VisibilityOff,
+  Google,
+  Twitter,
+} from '@mui/icons-material';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { login, error } = useAuth();
 
@@ -14,65 +38,164 @@ const LoginForm: React.FC = () => {
 
     try {
       await login(email, password);
-      // Redirection ou message de succès
     } catch (error) {
       console.error('Login failed:', error);
-      // L'erreur est déjà gérée dans le contexte
     } finally {
       setIsLoading(false);
     }
   };
 
-  return (
-    <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">Connexion</h2>
-      
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
-            Email:
-          </label>
-          <input
+  return (
+    <Card sx={{ maxWidth: 400, width: '100%', mx: 'auto', boxShadow: 3 }}>
+      <CardHeader
+        title={
+          <Typography variant="h4" component="h2" fontWeight="bold" textAlign="center" color="text.primary">
+            Connexion
+          </Typography>
+        }
+        subheader={
+          <Typography textAlign="center" color="text.secondary">
+            Accédez à votre compte SurveyMaster Pro
+          </Typography>
+        }
+        sx={{ pb: 1 }}
+      />
+
+      <CardContent sx={{ p: 3 }}>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+
+        <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            fullWidth
+            label="Email"
             type="email"
-            id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
             disabled={isLoading}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+            placeholder="votre@email.com"
           />
-        </div>
 
-        <div className="mb-6">
-          <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
-            Mot de passe:
-          </label>
-          <input
-            type="password"
-            id="password"
+          <TextField
+            fullWidth
+            label="Mot de passe"
+            type={showPassword ? 'text' : 'password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             disabled={isLoading}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+            placeholder="Votre mot de passe"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
-        </div>
 
-        <button 
-          type="submit" 
-          disabled={isLoading}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-gray-400 disabled:cursor-not-allowed transition duration-200"
-        >
-          {isLoading ? 'Connexion...' : 'Se connecter'}
-        </button>
-      </form>
-    </div>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="Se souvenir de moi"
+            />
+            <Link href="/forgot-password" variant="body2" color="primary">
+              Mot de passe oublié ?
+            </Link>
+          </Box>
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            size="large"
+            disabled={isLoading}
+            sx={{
+              bgcolor: 'text.primary',
+              py: 1.5,
+              fontSize: '1.1rem',
+              fontWeight: 600,
+              '&:hover': {
+                bgcolor: 'primary.main',
+                transform: 'translateY(-2px)',
+              },
+              transition: 'all 0.3s ease',
+            }}
+          >
+            {isLoading ? 'Connexion...' : 'Se connecter'}
+          </Button>
+        </Box>
+
+        <Divider sx={{ my: 3 }}>
+          <Typography variant="body2" color="text.secondary">
+            Ou continuer avec
+          </Typography>
+        </Divider>
+
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            size="large"
+            startIcon={<Google />}
+            sx={{
+              borderColor: 'grey.300',
+              py: 1.5,
+              '&:hover': {
+                borderColor: 'primary.main',
+                bgcolor: 'grey.50',
+              },
+            }}
+          >
+            Continuer avec Google
+          </Button>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            size="large"
+            startIcon={<Twitter />}
+            sx={{
+              borderColor: 'grey.300',
+              py: 1.5,
+              '&:hover': {
+                borderColor: 'primary.main',
+                bgcolor: 'grey.50',
+              },
+            }}
+          >
+            Continuer avec Twitter
+          </Button>
+        </Box>
+
+        <Box sx={{ textAlign: 'center', mt: 3 }}>
+          <Typography variant="body2" color="text.secondary">
+            Pas encore de compte ?{' '}
+            <Link href="/register" color="primary" fontWeight="medium">
+              S'inscrire
+            </Link>
+          </Typography>
+        </Box>
+      </CardContent>
+    </Card>
   );
 };
 

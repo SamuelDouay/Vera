@@ -1,4 +1,3 @@
-// src/services/apiService.ts
 import type {
   LoginRequest,
   RegisterRequest,
@@ -8,8 +7,7 @@ import type {
   ResponseApi
 } from '../types/api';
 
-//const API_BASE_URL = 'http://localhost:8080/api';
-// Vite utilise import.meta.env pour les variables d'environnement
+
 const API_BASE_URL = import.meta.env.DEV
   ? '/api'  // Utilise le proxy en développement
   : import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
@@ -53,16 +51,28 @@ class ApiService {
       };
     }
 
+
     try {
       const response = await fetch(url, config);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      let responseData;
+      try {
+        responseData = await response.json();
+      } catch (parseError) {
+        console.error('Failed to parse response as JSON:', parseError);
+        responseData = { message: 'Invalid JSON response' };
       }
 
-      return await response.json() as T;
+      if (!response.ok) {
+        // Créer une erreur enrichie avec les données de la réponse
+        const error = new Error(`${responseData.data}`) as any;
+        error.status = response.status;
+        error.responseData = responseData;
+        throw error;
+      }
+
+      return responseData as T;
     } catch (error) {
-      console.error('API request failed:', error);
+      ;
       throw error;
     }
   }

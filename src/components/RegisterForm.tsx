@@ -10,7 +10,6 @@ import {
   Button,
   Box,
   Typography,
-  Divider,
   Alert,
   Link,
   IconButton,
@@ -21,12 +20,14 @@ import {
 } from '@mui/material';
 import {
   Visibility,
-  VisibilityOff,
-  Google,
-  Twitter,
+  VisibilityOff
 } from '@mui/icons-material';
 
-const RegisterForm: React.FC = () => {
+interface RegisterFormProps {
+  onToggleMode: () => void;
+}
+
+const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleMode }) => {
   const [formData, setFormData] = useState<RegisterRequest & { confirmPassword: string }>({
     name: '',
     surname: '',
@@ -100,8 +101,9 @@ const RegisterForm: React.FC = () => {
         )}
 
         <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
+
+          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid size={6}>
               <TextField
                 fullWidth
                 label="Prénom"
@@ -112,7 +114,7 @@ const RegisterForm: React.FC = () => {
                 placeholder="Votre prénom"
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <TextField
                 fullWidth
                 label="Nom"
@@ -229,54 +231,19 @@ const RegisterForm: React.FC = () => {
           </Button>
         </Box>
 
-        <Divider sx={{ my: 3 }}>
-          <Typography variant="body2" color="text.secondary">
-            Ou s'inscrire avec
-          </Typography>
-        </Divider>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <Button
-            fullWidth
-            variant="outlined"
-            size="large"
-            startIcon={<Google />}
-            sx={{
-              borderColor: 'grey.300',
-              py: 1.5,
-              '&:hover': {
-                borderColor: 'primary.main',
-                bgcolor: 'grey.50',
-              },
-            }}
-          >
-            S'inscrire avec Google
-          </Button>
-
-          <Button
-            fullWidth
-            variant="outlined"
-            size="large"
-            startIcon={<Twitter />}
-            sx={{
-              borderColor: 'grey.300',
-              py: 1.5,
-              '&:hover': {
-                borderColor: 'primary.main',
-                bgcolor: 'grey.50',
-              },
-            }}
-          >
-            S'inscrire avec Twitter
-          </Button>
-        </Box>
-
         <Box sx={{ textAlign: 'center', mt: 3 }}>
           <Typography variant="body2" color="text.secondary">
             Déjà un compte ?{' '}
-            <Link href="/login" color="primary" fontWeight="medium">
+            <Typography
+              component="span"
+              variant="body2"
+              color="primary"
+              fontWeight="medium"
+              sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+              onClick={onToggleMode}
+            >
               Se connecter
-            </Link>
+            </Typography>
           </Typography>
         </Box>
       </CardContent>

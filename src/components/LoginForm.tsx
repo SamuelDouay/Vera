@@ -9,7 +9,6 @@ import {
   Button,
   Box,
   Typography,
-  Divider,
   Alert,
   FormControlLabel,
   Checkbox,
@@ -20,11 +19,13 @@ import {
 import {
   Visibility,
   VisibilityOff,
-  Google,
-  Twitter,
 } from '@mui/icons-material';
 
-const LoginForm: React.FC = () => {
+interface LoginFormProps {
+  onToggleMode: () => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ onToggleMode }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -144,54 +145,19 @@ const LoginForm: React.FC = () => {
           </Button>
         </Box>
 
-        <Divider sx={{ my: 3 }}>
-          <Typography variant="body2" color="text.secondary">
-            Ou continuer avec
-          </Typography>
-        </Divider>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <Button
-            fullWidth
-            variant="outlined"
-            size="large"
-            startIcon={<Google />}
-            sx={{
-              borderColor: 'grey.300',
-              py: 1.5,
-              '&:hover': {
-                borderColor: 'primary.main',
-                bgcolor: 'grey.50',
-              },
-            }}
-          >
-            Continuer avec Google
-          </Button>
-
-          <Button
-            fullWidth
-            variant="outlined"
-            size="large"
-            startIcon={<Twitter />}
-            sx={{
-              borderColor: 'grey.300',
-              py: 1.5,
-              '&:hover': {
-                borderColor: 'primary.main',
-                bgcolor: 'grey.50',
-              },
-            }}
-          >
-            Continuer avec Twitter
-          </Button>
-        </Box>
-
         <Box sx={{ textAlign: 'center', mt: 3 }}>
           <Typography variant="body2" color="text.secondary">
             Pas encore de compte ?{' '}
-            <Link href="/register" color="primary" fontWeight="medium">
+            <Typography
+              component="span"
+              variant="body2"
+              color="primary"
+              fontWeight="medium"
+              sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+              onClick={onToggleMode}
+            >
               S'inscrire
-            </Link>
+            </Typography>
           </Typography>
         </Box>
       </CardContent>

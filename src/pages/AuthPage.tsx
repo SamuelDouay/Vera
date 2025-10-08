@@ -16,22 +16,22 @@ import {
 
 const AuthPage: React.FC = () => {
     const [isLogin, setIsLogin] = useState<boolean>(true);
-    const theme = useTheme();
+    //const theme = useTheme();
     //const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     const features = [
         {
-            icon: <SmartToy sx={{ fontSize: 40, color: 'primary.main' }} />,
+            icon: <SmartToy sx={{ fontSize: 40, color: 'background.default' }} />,
             title: 'IA intégrée',
             description: 'Générez automatiquement des questions pertinentes avec notre IA conversationnelle'
         },
         {
-            icon: <Analytics sx={{ fontSize: 40, color: 'primary.main' }} />,
+            icon: <Analytics sx={{ fontSize: 40, color: 'background.default' }} />,
             title: 'Analytics en temps réel',
             description: 'Visualisez vos résultats avec des tableaux de bord interactifs et détaillés'
         },
         {
-            icon: <Security sx={{ fontSize: 40, color: 'primary.main' }} />,
+            icon: <Security sx={{ fontSize: 40, color: 'background.default' }} />,
             title: 'Sécurité RGPD',
             description: 'Données hébergées en France avec chiffrement de bout en bout'
         }
@@ -111,21 +111,10 @@ const AuthPage: React.FC = () => {
                     alignItems: 'center',
                     gap: 2
                 }}>
-                    {isLogin ? <LoginForm /> : <RegisterForm />}
-
-                    <Typography variant="body2" color="text.secondary">
-                        {isLogin ? "Pas encore de compte ? " : "Déjà un compte ? "}
-                        <Typography
-                            component="span"
-                            variant="body2"
-                            color="primary"
-                            fontWeight="medium"
-                            sx={{ cursor: 'pointer', textDecoration: 'underline' }}
-                            onClick={() => setIsLogin(!isLogin)}
-                        >
-                            {isLogin ? "S'inscrire" : "Se connecter"}
-                        </Typography>
-                    </Typography>
+                    {isLogin ?
+                        <LoginForm onToggleMode={() => setIsLogin(false)} /> :
+                        <RegisterForm onToggleMode={() => setIsLogin(true)} />
+                    }
                 </Box>
             </Box>
         </Container>

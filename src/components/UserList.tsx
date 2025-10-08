@@ -1,6 +1,34 @@
 import React, { useState } from 'react';
 import { useUsers } from '../hooks/useUsers';
 import type { User } from '../types/api';
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Chip,
+  Button,
+  CircularProgress,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
+import {
+  Edit,
+  Delete,
+  Person,
+  AdminPanelSettings,
+} from '@mui/icons-material';
 
 const UserList: React.FC = () => {
   const { users, loading, error, deleteUser } = useUsers();
@@ -31,135 +59,210 @@ const UserList: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-      </div>
+      <Box display="flex" justifyContent="center" alignItems="center" py={8}>
+        <CircularProgress size={40} />
+      </Box>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      <Alert severity="error" sx={{ mb: 2 }}>
         Erreur: {error}
-      </div>
+      </Alert>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h2 className="text-xl font-semibold text-gray-800">Liste des Utilisateurs</h2>
-        <p className="text-gray-600 mt-1">{users.length} utilisateur(s) trouvé(s)</p>
-      </div>
+    <Paper
+      elevation={1}
+      sx={{
+        borderRadius: 2,
+        overflow: 'hidden'
+      }}
+    >
+      {/* Header */}
+      <Box
+        sx={{
+          p: 3,
+          borderBottom: 1,
+          borderColor: 'divider',
+          backgroundColor: 'background.paper'
+        }}
+      >
+        <Typography variant="h5" component="h2" fontWeight="bold" color="text.primary">
+          Liste des Utilisateurs
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          {users.length} utilisateur(s) trouvé(s)
+        </Typography>
+      </Box>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      {/* Table */}
+      <TableContainer>
+        <Table>
+          <TableHead sx={{ backgroundColor: 'grey.50' }}>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 'bold', color: 'text.secondary' }}>
                 ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              </TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color: 'text.secondary' }}>
                 Nom
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              </TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color: 'text.secondary' }}>
                 Prénom
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              </TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color: 'text.secondary' }}>
                 Email
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              </TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color: 'text.secondary' }}>
                 Rôle
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              </TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color: 'text.secondary' }}>
                 Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {users.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
-                  Aucun utilisateur trouvé
-                </td>
-              </tr>
+              <TableRow>
+                <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Aucun utilisateur trouvé
+                  </Typography>
+                </TableCell>
+              </TableRow>
             ) : (
               users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50 transition duration-150">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {user.id}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {user.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {user.surname}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {user.email}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      user.role === 'admin' 
-                        ? 'bg-purple-100 text-purple-800' 
-                        : 'bg-green-100 text-green-800'
-                    }`}>
-                      {user.role || 'user'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                    <button
-                      onClick={() => {/* Implémentez l'édition */}}
-                      className="text-blue-600 hover:text-blue-900 transition duration-150"
-                    >
-                      Éditer
-                    </button>
-                    <button
-                      onClick={() => handleDeleteClick(user)}
-                      className="text-red-600 hover:text-red-900 transition duration-150"
-                    >
-                      Supprimer
-                    </button>
-                  </td>
-                </tr>
+                <TableRow
+                  key={user.id}
+                  sx={{
+                    '&:hover': {
+                      backgroundColor: 'action.hover'
+                    },
+                    transition: 'background-color 0.2s ease'
+                  }}
+                >
+                  <TableCell>
+                    <Typography variant="body2" color="text.primary">
+                      {user.id}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" fontWeight="medium" color="text.primary">
+                      {user.name}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" color="text.primary">
+                      {user.surname}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" color="text.primary">
+                      {user.email}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Chip
+                      icon={user.role === 'admin' ? <AdminPanelSettings /> : <Person />}
+                      label={user.role || 'user'}
+                      color={user.role === 'admin' ? 'primary' : 'default'}
+                      variant={user.role === 'admin' ? 'filled' : 'outlined'}
+                      size="small"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      <Tooltip title="Éditer">
+                        <IconButton
+                          size="small"
+                          onClick={() => {/* Implémentez l'édition */ }}
+                          sx={{
+                            color: 'primary.main',
+                            '&:hover': {
+                              backgroundColor: 'primary.light',
+                              color: 'primary.dark'
+                            }
+                          }}
+                        >
+                          <Edit fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Supprimer">
+                        <IconButton
+                          size="small"
+                          onClick={() => handleDeleteClick(user)}
+                          sx={{
+                            color: 'error.main',
+                            '&:hover': {
+                              backgroundColor: 'error.light',
+                              color: 'error.dark'
+                            }
+                          }}
+                        >
+                          <Delete fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </TableCell>
+                </TableRow>
               ))
             )}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       {/* Modal de confirmation de suppression */}
-      {showDeleteModal && selectedUser && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Confirmer la suppression
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Êtes-vous sûr de vouloir supprimer l'utilisateur{" "}
-              <span className="font-semibold">
-                {selectedUser.name} {selectedUser.surname}
-              </span>
-              ? Cette action est irréversible.
-            </p>
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={handleCancelDelete}
-                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition duration-150"
-              >
-                Annuler
-              </button>
-              <button
-                onClick={handleConfirmDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-150"
-              >
-                Supprimer
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+      <Dialog
+        open={showDeleteModal}
+        onClose={handleCancelDelete}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+        PaperProps={{
+          sx: { borderRadius: 2 }
+        }}
+      >
+        <DialogTitle id="delete-dialog-title" sx={{ pb: 1 }}>
+          <Typography variant="h6" fontWeight="bold">
+            Confirmer la suppression
+          </Typography>
+        </DialogTitle>
+        <DialogContent sx={{ pb: 1 }}>
+          <DialogContentText id="delete-dialog-description">
+            Êtes-vous sûr de vouloir supprimer l'utilisateur{' '}
+            <Typography component="span" fontWeight="bold" color="text.primary">
+              {selectedUser?.name} {selectedUser?.surname}
+            </Typography>
+            ? Cette action est irréversible.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ p: 2, pt: 1 }}>
+          <Button
+            onClick={handleCancelDelete}
+            variant="outlined"
+            color="inherit"
+            sx={{
+              borderRadius: 1,
+              textTransform: 'none'
+            }}
+          >
+            Annuler
+          </Button>
+          <Button
+            onClick={handleConfirmDelete}
+            variant="contained"
+            color="error"
+            sx={{
+              borderRadius: 1,
+              textTransform: 'none'
+            }}
+          >
+            Supprimer
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Paper>
   );
 };
 

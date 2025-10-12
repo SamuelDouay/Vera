@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import type { User } from '../types/api';
 import { useUsers } from '../hooks/useUsers';
+import type { User } from '../types/api';
 
 interface UserFormProps {
   user?: User | null;

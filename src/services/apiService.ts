@@ -1,10 +1,10 @@
 import type {
+  User,
+  ResponseApi,
   LoginRequest,
   RegisterRequest,
   RefreshRequest,
   ResetPasswordRequest,
-  User,
-  ResponseApi
 } from '../types/api';
 
 

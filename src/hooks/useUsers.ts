@@ -20,7 +20,7 @@ export const useUsers = (): UseUsersReturn => {
   const fetchUsers = async (limit: number = 100, offset: number = 0): Promise<ResponseApi<User[]>> => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await apiService.getAllUsers(limit, offset);
       setUsers(response.data || []);
@@ -51,7 +51,7 @@ export const useUsers = (): UseUsersReturn => {
     setError(null);
     try {
       const response = await apiService.updateUser(id, userData);
-      setUsers(prev => prev.map(user => 
+      setUsers(prev => prev.map(user =>
         user.id === id ? { ...user, ...userData } : user
       ));
       return response;

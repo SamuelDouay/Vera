@@ -1,14 +1,18 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import tsconfigPaths from "vite-tsconfig-paths"
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss()
-  ],
-  server: {
+  plugins: [react(), tsconfigPaths()],
+ server: {
+    host: 'localhost',
+    port: 3000,
+    // Optionnel : forcer le HMR à utiliser HTTP au lieu de WebSocket
+    hmr: {
+      protocol: 'ws',
+      host: 'localhost'
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:8080',

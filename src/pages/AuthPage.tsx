@@ -1,10 +1,8 @@
-// src/pages/AuthPage.tsx
 import React, { useState } from 'react';
 import {
     Container,
     Box,
-    Typography,
-    useTheme
+    Typography
 } from '@mui/material';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
@@ -16,8 +14,6 @@ import {
 
 const AuthPage: React.FC = () => {
     const [isLogin, setIsLogin] = useState<boolean>(true);
-    //const theme = useTheme();
-    //const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     const features = [
         {

@@ -1,4 +1,3 @@
-// src/components/RegisterForm.tsx
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import type { RegisterRequest } from '../types/api';

@@ -21,6 +21,7 @@ const AppContent: React.FC = () => {
     return <AuthPage />;
   }
 
+  
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white shadow-sm">

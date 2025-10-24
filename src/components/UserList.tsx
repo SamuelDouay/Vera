@@ -165,10 +165,10 @@ const UserList: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Chip
-                      icon={user.role === 'admin' ? <AdminPanelSettings /> : <Person />}
-                      label={user.role || 'user'}
-                      color={user.role === 'admin' ? 'primary' : 'default'}
-                      variant={user.role === 'admin' ? 'filled' : 'outlined'}
+                      icon={user.admin ? <AdminPanelSettings /> : <Person />}
+                      label={user.admin ? 'admin':'user'}
+                      color={user.admin ? 'primary' : 'default'}
+                      variant={user.admin ? 'filled' : 'outlined'}
                       size="small"
                     />
                   </TableCell>

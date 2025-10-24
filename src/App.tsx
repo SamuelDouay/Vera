@@ -1,7 +1,7 @@
 import React from 'react';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import AuthPage from './pages/AuthPage';
-import UserList from './components/UserList';
+import Dashboard from './pages/DashboardPage';
 
 const AppContent: React.FC = () => {
   const { isAuthenticated, logout, user, loading } = useAuth();
@@ -21,33 +21,8 @@ const AppContent: React.FC = () => {
     return <AuthPage />;
   }
 
-  
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">VERA Application</h1>
-            <p className="text-gray-600 text-sm">
-              Connecté en tant que {user?.name} {user?.surname} ({user?.email})
-            </p>
-          </div>
-          <div className="flex items-center space-x-4">
-            <span className="text-gray-600">Bienvenue, {user?.name}</span>
-            <button 
-              onClick={logout} 
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition duration-200"
-            >
-              Déconnexion
-            </button>
-          </div>
-        </div>
-      </header>
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        <UserList />
-      </main>
-    </div>
-  );
+
+  return (<Dashboard />);
 };
 
 const App: React.FC = () => {
